@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Student Wellness Monitor</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f0f4f8;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  /* Container */
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  }
+
+  /* Mood Selection */
+  .mood-selection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .mood-option {
+    cursor: pointer;
+    font-size: 2.5rem;
+    user-select: none;
+    transition: transform 0.2s ease;
+  }
+  .mood-option:hover,
+  .mood-option.selected {
+    transform: scale(1.3);
+  }
+
+  /* Textarea */
+  textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 80px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    margin-bottom: 1.5rem;
+    font-family: inherit;
+  }
+  textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+  }
+
+  /* Button */
+  button {
+    width: 100%;
+    background-color: #4a90e2;
+    color: white;
+    padding: 12px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #357abd;
+  }
+  button:disabled {
+    background-color: #a0c1f7;
+    cursor: not-allowed;
+  }
+
+  /* Trend Visualization Placeholder */
+  .trend-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
+  .trend-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+  }
+  .trend-placeholder {
+    height: 150px;
+    background: linear-gradient(135deg, #4a90e2 25%, #9dc6fb 75%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    user-select: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 520px) {
+    .container {
+      margin: 1rem;
+      padding: 1rem 1.5rem;
+    }
+    .mood-option {
+      font-size: 2rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Daily Mood Check-in</h1>
+
+  <form id="moodForm">
+    <div class="mood-selection" aria-label="Mood selection">
+      <span class="mood-option" role="radio" tabindex="0" aria-checked="false" data-value="happy" title="Happy">😊</span>
+      <span class="mood-option" role="radio" tabindex="0" aria-checked="false" data-value="neutral" title="Neutral">😐</span>
+      <span class="mood-option" role="radio" tabindex="0" aria-checked="false" data-value="sad" title="Sad">😔</span>
+      <span class="mood-option" role="radio" tabindex="0" aria-checked="false" data-value="angry" title="Angry">😠</span>
+      <span class="mood-option" role="radio" tabindex="0" aria-checked="false" data-value="anxious" title="Anxious">😟</span>
+    </div>
+
+    <label for="notes">Optional Notes / Journal Entry</label>
+    <textarea id="notes" name="notes" placeholder="Write how you feel..." rows="4"></textarea>
+
+    <button type="submit" disabled>Submit Check-in</button>
+  </form>
+
+  <div class="trend-section">
+    <h2>Mood Trends</h2>
+    <div class="trend-placeholder">[Mood trends visualization will appear here]</div>
+  </div>
+</div>
+
+<script>
+  // Select DOM elements
+  const moodOptions = document.querySelectorAll('.mood-option');
+  const submitBtn = document.querySelector('button[type="submit"]');
+  let selectedMood = null;
+
+  // Handle mood selection click
+  moodOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      selectMood(option);
+    });
+    option.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectMood(option);
+      }
+    });
+  });
+
+  function selectMood(option) {
+    moodOptions.forEach(o => {
+      o.classList.remove('selected');
+      o.setAttribute('aria-checked', 'false');
+    });
+    option.classList.add('selected');
+    option.setAttribute('aria-checked', 'true');
+    selectedMood = option.dataset.value;
+    submitBtn.disabled = false;
+  }
+
+  // Form submission handler
+  document.getElementById('moodForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!selectedMood) return;
+
+    const notes = document.getElementById('notes').value.trim();
+
+    // For now, just show an alert (replace with API call later)
+    alert(`Mood: ${selectedMood}\nNotes: ${notes || 'No notes'}`);
+
+    // Reset form
+    moodOptions.forEach(o => {
+      o.classList.remove('selected');
+      o.setAttribute('aria-checked', 'false');
+    });
+    selectedMood = null;
+    submitBtn.disabled = true;
+    e.target.reset();
+  });
+</script>
+
+</body>
+</html>
+
+
+
+
+
